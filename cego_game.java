@@ -3,7 +3,7 @@ public class cego_game {
   private cego_deck deck;
   private int einsatz;
   private int pot;
-  public int player;
+  private int player;
   private cego_player[] spieler;
   
   public cego_game(){
@@ -16,6 +16,10 @@ public class cego_game {
     this.einsatz = einsatz;
     this.player = player;
     insertPlayer();
+  }
+
+  public int getPlayer(){
+    return player;
   }
 
   public int getEinsatz(){
