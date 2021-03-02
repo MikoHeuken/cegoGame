@@ -116,7 +116,7 @@ public class cego_game {
   private int[] turn(cego_player player, int[] cards){
     if(player.getIsReal()){                                 //falls Spieler reel ist...
       if(cards[0] == -1){                                   //...und noch keine Karte auf dem Tisch
-        System.out.println("Spieler " + player + " darf die erste Karte legen.");
+        System.out.println("Spieler " + player.getNr() + " darf die erste Karte legen.");
         System.out.println("Das sind deine Karten:");
         player.printCards();
         System.out.println("Welche Karte willt du legen?");
@@ -132,7 +132,7 @@ public class cego_game {
             karten++;
           }
         }
-        System.out.println("Spieler " + player + " ist an der Reihe. Welche Karte willst du legen?");
+        System.out.println("Spieler " + player.getNr() + " ist an der Reihe. Welche Karte willst du legen?");
         int card = In.readInt();
         if(!isValidCard(cards[0], player, card - 1)){
           do{
@@ -146,7 +146,7 @@ public class cego_game {
     }
     else{                                                   //falls Spieler nicht reel ist...
       if(cards[0] == -1){                                   //...und noch keine Karte auf dem Tisch
-        System.out.println("Spieler " + player + " legt die erste Karte.");
+        System.out.println("Spieler " + player.getNr() + " legt die erste Karte.");
         int k = 26;
         int m = -1;
         for(int i = 0; i < player.getCards().length; i++){
@@ -159,7 +159,18 @@ public class cego_game {
         player.setCard(m, null);
       }
       else{                                                 //...und schon mind. eine Karte auf dem Tisch
-        //TODO
+        System.out.println("Spieler " + player.getNr() + " legt eine Karte.");
+        int k = 0;
+        for(int i = 0; i < cards.length; i++){
+          if(cards[i] != -1){
+            k++;                                            //schauen wie viel Karten schon auf "dem Tisch" liegt
+          }
+        }
+        if(k == cards.length - 1){                          //falls der Spieler die letzte Karte legen darf
+          //TODO
+        }else{                                              //falls nicht
+          //TODO
+        }
       }
     }
     return cards;
