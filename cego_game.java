@@ -158,18 +158,20 @@ public class cego_game {
         cards[0] = player.getCards()[m].getNr();
         player.setCard(m, null);
       }
-      else{                                                 //...und schon mind. eine Karte auf dem Tisch
+      else{                                                       //...und schon mind. eine Karte auf dem Tisch
         System.out.println("Spieler " + player.getNr() + " legt eine Karte.");
-        int k = 0;
+        int karten = 0;
         for(int i = 0; i < cards.length; i++){
           if(cards[i] != -1){
-            k++;                                            //schauen wie viel Karten schon auf "dem Tisch" liegt
+            karten++;                                             //schauen wie viel Karten schon auf "dem Tisch" liegt
           }
         }
-        if(k == cards.length - 1){                          //falls der Spieler die letzte Karte legen darf
+        if(karten == cards.length - 1){                           //falls der Spieler die letzte Karte legen darf
           //TODO
-        }else{                                              //falls nicht
-          //TODO
+        }else{                                                    //falls nicht
+          int card = leastValuePossible(player, cards[0]);
+          cards[karten] = player.getCards()[card].getNr();
+          player.setCard(card, null);
         }
       }
     }
@@ -205,6 +207,28 @@ public class cego_game {
       }
     }
     return false;
+  }
+
+  /**
+   * gibt die niedrigste Karte zurück die gelegt werden kann
+   * @param cards die Karten auf der Hand
+   * @param firstCard die erste Karte die auf dem Tisch liegt
+   * @return die Stelle der niedrigsten Karte
+   */
+  private int leastValuePossible(cego_player player, int firstCard){
+    int k = 0;
+    if(!anyValidCard(firstCard, player)){
+      while(player.getCards()[k] != null){                              //wenn keine Karte passend gespielt werden kann,
+        k++;                                                            //wird die erste Karte genommen
+      }
+    } else {
+      for(int i = 0; i < player.getCards().length; i++){
+        if(player.getCards()[i].getValue() < player.getCards()[k].getValue()){
+          k = i;
+        }
+      }
+    }
+    return k;
   }
 
 }
