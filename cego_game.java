@@ -115,6 +115,7 @@ public class cego_game {
    */
   private int[] turn(cego_player player, int[] cards){
     if(player.getIsReal()){                                 //falls Spieler reel ist...
+
       if(cards[0] == -1){                                   //...und noch keine Karte auf dem Tisch
         System.out.println("Spieler " + player.getNr() + " darf die erste Karte legen.");
         System.out.println("Das sind deine Karten:");
@@ -123,6 +124,7 @@ public class cego_game {
         int card = In.readInt();
         cards[0] = player.getCards()[card - 1].getNr();
         player.setCard(card - 1, null);
+
       }else{                                                //...und schon mind. eine Karte auf dem Tisch
         int karten = 0;
         System.out.println("Folgende Karten liegen auf dem Tisch:");
@@ -144,7 +146,9 @@ public class cego_game {
         player.setCard(card - 1, null);
       }
     }
+
     else{                                                   //falls Spieler nicht reel ist...
+
       if(cards[0] == -1){                                   //...und noch keine Karte auf dem Tisch
         System.out.println("Spieler " + player.getNr() + " legt die erste Karte.");
         int k = 26;
@@ -158,6 +162,7 @@ public class cego_game {
         cards[0] = player.getCards()[m].getNr();
         player.setCard(m, null);
       }
+
       else{                                                       //...und schon mind. eine Karte auf dem Tisch
         System.out.println("Spieler " + player.getNr() + " legt eine Karte.");
         int karten = 0;
@@ -166,14 +171,19 @@ public class cego_game {
             karten++;                                             //schauen wie viel Karten schon auf "dem Tisch" liegt
           }
         }
+
         if(karten == cards.length - 1){                           //falls der Spieler die letzte Karte legen darf
-          //TODO
+          int card = leastValueForStitch(cards, player);
+          cards[karten] = player.getCards()[card].getNr();
+          player.setCard(card, null);
+
         }else{                                                    //falls nicht
           int card = leastValuePossible(player, cards[0]);
           cards[karten] = player.getCards()[card].getNr();
           player.setCard(card, null);
         }
       }
+
     }
     return cards;
   }
@@ -229,6 +239,38 @@ public class cego_game {
       }
     }
     return k;
+  }
+
+  /**
+   * gibt die niedrigste Karte zurück mit der ein Stich gemacht werden kann,
+   * kann keiner gemacht werden gibt es die niedrigste erlaubte Karte zurück
+   * @param cardsOnTable  alle Karten die sich auf dem Tisch befinden
+   * @param player  der Spieler der an der Reihe ist
+   * @return die Stelle der gesuchten Karte
+   */
+  private int leastValueForStitch(int[] cardsOnTable, cego_player player){
+    int firstCard = cardsOnTable[0];
+    int highestCard = -1;
+    cego_card[] playerCards = player.getCards();
+    int position = -1;
+
+    for(int i = 0; i < cardsOnTable.length; i++){                      //die höchste Karte auf dem Tisch bestimmen
+      if(cardsOnTable[i] > highestCard){
+        highestCard = cardsOnTable[i];
+      }
+    }
+
+    for(int i = 0; i < playerCards.length; i++){                      //alle Karten des Spielers durchgehen und schauen ob eine höher ist als diehöchste auf dem Tisch
+      if(playerCards[i].getNr() > highestCard){
+        position = i;
+      }
+    }
+
+    if(position == -1){
+      return leastValuePossible(player, firstCard);
+    }else{
+      return position;
+    }
   }
 
 }
