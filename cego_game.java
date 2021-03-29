@@ -105,6 +105,10 @@ public class cego_game {
     for(int i = 0; i < player; i++){
       cards[i] = -1;
     }
+
+    for(int i = 0; i < player; i++){                        //jeder spieler darf eine Karte ablegen
+      cards = turn(playerCopy[i], cards);
+    }
   }
 
   /**
