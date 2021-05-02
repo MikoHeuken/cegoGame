@@ -86,10 +86,19 @@ public class cego_game {
   }
 
   /**
+   * fügt dem Pot einen bestimmten Betrag hinzu
+   * @param betrag der Betrag der hinzugefügt wird
+   */
+  public void setPot(int betrag){
+    pot = pot + betrag;
+  }
+
+  /**
    * startet eine Runde mit allen (Runde Typ 1)
    * @param beginner der Spieler der Anfängt
+   * @return der Spieler der die Runde gewonnen hat
    */
-  public void startRoundAll(int beginner){
+  public cego_player startRoundAll(int beginner){
     cego_player[] playerCopy = new cego_player[spieler.length];                         //eine Kopie des Spieler-Arrays wird erstellt,
     int count = 0;                                                                      //die Spieler werden so angeordnet, dass der, der 
     for(int i = beginner; i < playerCopy.length; i++){                                  //anfängt, an der ersten Position im neuen Array ist
@@ -101,14 +110,16 @@ public class cego_game {
       count++;
     }
 
-    int[] cards = new int[player];                          //ein array wird erstellt, welches die Kartennummern der Karten auf dem Tisch enthält
+    int[] cards = new int[player];                          //ein Array wird erstellt, welches die Kartennummern der Karten auf dem Tisch enthält
     for(int i = 0; i < player; i++){
       cards[i] = -1;
     }
 
-    for(int i = 0; i < player; i++){                        //jeder spieler darf eine Karte ablegen
+    for(int i = 0; i < player; i++){                        //jeder Spieler darf eine Karte ablegen
       cards = turn(playerCopy[i], cards);
     }
+
+    return playerCopy[highestCard(cards)];
   }
 
   /**
@@ -139,6 +150,9 @@ public class cego_game {
           }
         }
         System.out.println("Spieler " + player.getNr() + " ist an der Reihe. Welche Karte willst du legen?");
+        System.out.println();
+        System.out.println("Dies sind deine Karten:");
+        player.printCards();
         int card = In.readInt();
         if(!isValidCard(cards[0], player, card - 1)){
           do{
@@ -275,6 +289,22 @@ public class cego_game {
     }else{
       return position;
     }
+  }
+
+  /**
+   * schaut was die höchste Karte von mehreren ist
+   * falls mehrere Karten gleich groß ist, wird die erste Karte mit dem höchsten Wert im Staprl zurückgegeben
+   * @param cards der Stapel Karten, der durchgeschaut wird
+   * @return  die Stelle an der sich die höchste Karte im Stapel befindet
+   */
+  private int highestCard(int[] cards){
+    int k = 0;
+    for(int i = 1; i <cards.length; i++){
+      if(cego_card.getValueFromNr(cards[i]) > cego_card.getValueFromNr(cards[k])){
+        k = i;
+      }
+    }
+    return k;
   }
 
 }
