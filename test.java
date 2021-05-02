@@ -25,5 +25,8 @@ public class test {
     //cego_game spiel = new cego_game(3, 0.1);
     //System.out.print("Hallo " + \r\n + " hallo");
     System.out.println(cego_card.getValueFromNr(37));
+
+    //TODO
+    //in cego_game.turn line 175. wenn Karte weg ist, value nicht ermittelbar
   }
 }
