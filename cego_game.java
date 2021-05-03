@@ -36,6 +36,7 @@ public class cego_game {
 
   public void printPot(){
     System.out.println("Im Pot befinden sich nun " + pot + "ct.");
+    System.out.println();
   }
 
   public cego_player[] getSpieler(){
@@ -53,7 +54,7 @@ public class cego_game {
       System.out.println("Erstelle Spieler " + (i+1) + ":");
       System.out.println("Soll dieser Spieler ein echter Spieler sein? (true/false)");
       boolean isReal = In.readBoolean();
-      spieler[i] = new cego_player(money, isReal, i);
+      spieler[i] = new cego_player(money, isReal, (i+1));
     }
   }
 
@@ -142,6 +143,7 @@ public class cego_game {
 
       }else{                                                //...und schon mind. eine Karte auf dem Tisch
         int karten = 0;
+        System.out.println();
         System.out.println("Folgende Karten liegen auf dem Tisch:");
         for(int i = 0; i < cards.length; i++){
           if(cards[i] != -1){
@@ -172,9 +174,11 @@ public class cego_game {
         int k = 26;
         int m = -1;
         for(int i = 0; i < player.getCards().length; i++){
-          if(player.getCards()[i].getValue() < k){
-            k = player.getCards()[i].getValue();
-            m = i;
+          if(player.getCards()[i] != null){
+            if(player.getCards()[i].getValue() < k){
+              k = player.getCards()[i].getValue();
+              m = i;
+            }
           }
         }
         cards[0] = player.getCards()[m].getNr();
@@ -230,8 +234,10 @@ public class cego_game {
    */
   private boolean anyValidCard(int firstCard, cego_player player){
     for(int i = 0; i < player.getCards().length; i++){
-      if(player.getCards()[i].getNr() > 15 || player.getCards()[i].getNr() % 4 == firstCard % 4){
-        return true;
+      if(player.getCards()[i] != null){
+        if(player.getCards()[i].getNr() > 15 || player.getCards()[i].getNr() % 4 == firstCard % 4){
+          return true;
+        }
       }
     }
     return false;
@@ -250,9 +256,14 @@ public class cego_game {
         k++;                                                            //wird die erste Karte genommen
       }
     } else {
+      while(player.getCards()[k] == null){
+        k++;
+      }
       for(int i = 0; i < player.getCards().length; i++){
-        if(player.getCards()[i].getValue() < player.getCards()[k].getValue()){
-          k = i;
+        if(player.getCards()[i] != null){
+          if(player.getCards()[i].getValue() < player.getCards()[k].getValue()){
+            k = i;
+          }
         }
       }
     }
@@ -279,8 +290,10 @@ public class cego_game {
     }
 
     for(int i = 0; i < playerCards.length; i++){                      //alle Karten des Spielers durchgehen und schauen ob eine höher ist als diehöchste auf dem Tisch
-      if(playerCards[i].getNr() > highestCard){
-        position = i;
+      if(playerCards[i] != null){
+        if(playerCards[i].getNr() > highestCard){
+          position = i;
+        }
       }
     }
 

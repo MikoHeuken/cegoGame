@@ -52,6 +52,7 @@ public class cego_player {
   }
 
   public void printCards(){
+    System.out.println();
     for(int i = 0; i < cards.length; i++){
       if(cards[i] != null){
         System.out.println("Karte " + (i+1) + ": " + cards[i].getCardName());

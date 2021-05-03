@@ -16,7 +16,9 @@ public class cego_main {
   }
 
   public static void startNew(cego_game game){
+    System.out.println();
     System.out.println("Teile Karten aus...");
+    System.out.println();
     game.austeilen();
     System.out.println("Jeder Spieler zahlt " + einsatz + "ct in den Pot.");
     game.setPotAll(einsatz);
@@ -26,16 +28,21 @@ public class cego_main {
     for(int i = 0; i < 4; i++){
       cego_player winner = game.startRoundAll(beginner);
       setBeginner();
-      System.out.println("Spieler " + (winner.getNr()+1) + ", hat die " + (i+1) + ". Runde gewonnen.");
+      System.out.println();
+      System.out.println("Spieler " + winner.getNr() + ", hat die " + (i+1) + ". Runde gewonnen.");
       System.out.println("Er erhält: " + game.getPot()/(4-i) + "ct.");
+      System.out.println();
       winner.setMoney(game.getPot()/(4-i));
-      
-      game.setPot((int) game.getPot()/(4-i));
+      game.setPot((int) game.getPot()/(4-i)*-1);
+    }
+    for(int i = 0; i < game.getPlayer(); i++){                                                                        //zeigt nach dem Rundenende den Spielstand jedes Spielers
+      System.out.println("Spieler " + (i+1) + " hat nun " + game.getSpieler()[i].getMoney() + "ct.");
+      System.out.println();
     } 
   }
 
   /**
-   * ändert den starter nach jeder runde
+   * ändert den Starter nach jeder runde
    */
   private static void setBeginner(){
     if(beginner == 0 || beginner == player){
