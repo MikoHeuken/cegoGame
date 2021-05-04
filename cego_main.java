@@ -27,7 +27,7 @@ public class cego_main {
     setBeginner();
     for(int i = 0; i < 4; i++){
       cego_player winner = game.startRoundAll(beginner);
-      setBeginner();
+      beginner = winner.getNr() - 1;
       System.out.println();
       System.out.println("Spieler " + winner.getNr() + ", hat die " + (i+1) + ". Runde gewonnen.");
       System.out.println("Er erhält: " + game.getPot()/(4-i) + "ct.");

@@ -156,7 +156,7 @@ public class cego_game {
         System.out.println("Dies sind deine Karten:");
         player.printCards();
         int card = In.readInt();
-        if(!isValidCard(cards[0], player, card - 1)){
+        if(card < 1 || card > 4 || !isValidCard(cards[0], player, card - 1)){
           do{
             System.out.println("Diese Karte darf nicht gelegt werden. Wähle bitte eine neue.");
             card = In.readInt();
@@ -214,7 +214,7 @@ public class cego_game {
    * testet ob eine Karte gelegt werden darf
    * @param firstCard die erste Karte (Nr) die auf den Tisch gelegt wurde
    * @param player der Spieler, dessen Karte überprüft wird
-   * @param card die Karte die überprüft werden soll
+   * @param card die Karte die überprüft werden soll (nummer auf der hand des Spielers)
    * @return true falls die Karte gelegt werden darf
    */
   private boolean isValidCard(int firstCard, cego_player player, int card){
@@ -252,16 +252,16 @@ public class cego_game {
   private int leastValuePossible(cego_player player, int firstCard){
     int k = 0;
     if(!anyValidCard(firstCard, player)){
-      while(player.getCards()[k] != null){                              //wenn keine Karte passend gespielt werden kann,
+      while(player.getCards()[k] == null){                              //wenn keine Karte passend gespielt werden kann,
         k++;                                                            //wird die erste Karte genommen
       }
     } else {
-      while(player.getCards()[k] == null){
+      while(player.getCards()[k] == null || !isValidCard(firstCard, player, k)){
         k++;
       }
       for(int i = 0; i < player.getCards().length; i++){
         if(player.getCards()[i] != null){
-          if(player.getCards()[i].getValue() < player.getCards()[k].getValue()){
+          if(player.getCards()[i].getValue() < player.getCards()[k].getValue() && isValidCard(firstCard, player, i)){
             k = i;
           }
         }
