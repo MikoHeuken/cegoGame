@@ -256,7 +256,7 @@ public class cego_game {
         k++;                                                            //wird die erste Karte genommen
       }
     } else {
-      while(player.getCards()[k] == null || !isValidCard(firstCard, player, k)){          //TODO
+      while((player.getCards()[k] == null || !isValidCard(firstCard, player, k)) && k < 3){          
         k++;
       }
       for(int i = 0; i < player.getCards().length; i++){
@@ -333,8 +333,9 @@ public class cego_game {
     }
 
     for(int i = 0; i < playerCopy.length; i++){
+
       if(playerCopy[i].getIsReal()){                                                    //falls Spieler echt...
-        System.out.println("Spieler" + playerCopy[i].getNr() + " das sind deine Karten: ");
+        System.out.println("Spieler " + playerCopy[i].getNr() + " das sind deine Karten: ");
         playerCopy[i].printCards();
         System.out.println("Wie viele Karten willst du tauschen?");
         int howMany = In.readInt();
@@ -349,6 +350,18 @@ public class cego_game {
             zufall = (int) (Math.random()*38);                                           //wird dem Spieler gegeben
           }while(deck.deck[zufall] == null);
           playerCopy[i].setCard(stellen[k], deck.deck[zufall]);
+        }
+      }
+
+      else{
+        for(int k = 0; k < playerCopy[i].getCards().length; k++){                       //falls Spieler nicht echt...
+          if(playerCopy[i].getCards()[k].getValue() < 8){                               //alle Karten kleiner gleich 5 werden getauscht
+            int zufall;
+          do{                                                                            
+            zufall = (int) (Math.random()*38);                                          
+          }while(deck.deck[zufall] == null);
+          playerCopy[i].setCard(k, deck.deck[zufall]);
+          }
         }
       }
     }
