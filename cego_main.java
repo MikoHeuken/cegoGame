@@ -23,8 +23,8 @@ public class cego_main {
     System.out.println("Jeder Spieler zahlt " + einsatz + "ct in den Pot.");
     game.setPotAll(einsatz);
     game.printPot();
-    //change cards //TODO
-    setBeginner();
+    game.changeCards(beginner); //TODO
+    //setBeginner();
     for(int i = 0; i < 4; i++){                                                                                       //4 Runden werden gespielt
       cego_player winner = game.startRoundAll(beginner);
       beginner = winner.getNr() - 1;

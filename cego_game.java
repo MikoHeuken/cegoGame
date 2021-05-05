@@ -256,7 +256,7 @@ public class cego_game {
         k++;                                                            //wird die erste Karte genommen
       }
     } else {
-      while(player.getCards()[k] == null || !isValidCard(firstCard, player, k)){
+      while(player.getCards()[k] == null || !isValidCard(firstCard, player, k)){          //TODO
         k++;
       }
       for(int i = 0; i < player.getCards().length; i++){
@@ -320,4 +320,37 @@ public class cego_game {
     return k;
   }
 
+  /**
+   * lässt jeden Spieler seine Karten tauschen bevor eine Runde losgeht
+   * @param beginner der Spieler der als erstes tauschen darf
+   */
+  public void changeCards(int beginner){
+    cego_player[] playerCopy = new cego_player[spieler.length];                         //eine Kopie des Spieler-Arrays wird erstellt,
+    int count = 0;                                                                      //die Spieler werden so angeordnet, dass der, der 
+    for(int i = beginner; i < playerCopy.length; i++){                                  //anfängt, an der ersten Position im neuen Array ist
+      playerCopy[count] = spieler[i];
+      count++;
+    }
+
+    for(int i = 0; i < playerCopy.length; i++){
+      if(playerCopy[i].getIsReal()){                                                    //falls Spieler echt...
+        System.out.println("Spieler" + playerCopy[i].getNr() + " das sind deine Karten: ");
+        playerCopy[i].printCards();
+        System.out.println("Wie viele Karten willst du tauschen?");
+        int howMany = In.readInt();
+        int[] stellen = new int[howMany];
+        for(int k = 0; k < howMany; k++){                                                //die Plätze der zu tauschenden Karten werden sich gemerkt
+          System.out.println("Welche Karte willst du tauschen?");
+          stellen[k] = In.readInt()-1;
+        }
+        for(int k = 0; k < howMany; k++){
+          int zufall;
+          do{                                                                            //eine zufällige Karte aus dem Stapel (die noch nicht verteilt wurde)
+            zufall = (int) (Math.random()*38);                                           //wird dem Spieler gegeben
+          }while(deck.deck[zufall] == null);
+          playerCopy[i].setCard(stellen[k], deck.deck[zufall]);
+        }
+      }
+    }
+  }
 }
