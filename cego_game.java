@@ -60,16 +60,17 @@ public class cego_game {
 
   /**
    * teilt jedem Spieler 4 Karten aus
+   * @param player die Spieler, denen Karten ausgeteilt wird
    */
-  public void austeilen(){                                            
+  public void austeilen(cego_player[] player){                                            
     deck = new cego_deck();
     int zufall;
-    for(int i = 0; i < spieler.length; i++){
+    for(int i = 0; i < player.length; i++){
       for(int k = 0; k < 4; k++){
         do{
           zufall = (int) (Math.random()*38);
         }while(deck.deck[zufall] == null);
-        spieler[i].setCard(k, deck.deck[zufall]);
+        player[i].setCard(k, deck.deck[zufall]);
         deck.deck[zufall] = null;
       }
     }
