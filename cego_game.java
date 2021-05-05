@@ -220,7 +220,7 @@ public class cego_game {
   private boolean isValidCard(int firstCard, cego_player player, int card){
     if(!anyValidCard(firstCard, player)){
       return true;
-    }else if(player.getCards()[card].getNr() > 15 || player.getCards()[card].getNr() % 4 == firstCard % 4){
+    }else if(player.getCards()[card].getNr() > 15 || player.getCards()[card].getNr() % 4 == firstCard % 4 && firstCard < 16){
       return true;
     }
     return false;

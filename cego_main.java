@@ -25,7 +25,7 @@ public class cego_main {
     game.printPot();
     //change cards //TODO
     setBeginner();
-    for(int i = 0; i < 4; i++){
+    for(int i = 0; i < 4; i++){                                                                                       //4 Runden werden gespielt
       cego_player winner = game.startRoundAll(beginner);
       beginner = winner.getNr() - 1;
       System.out.println();
