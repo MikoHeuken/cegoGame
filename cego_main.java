@@ -53,7 +53,7 @@ public class cego_main {
       System.out.println();
     } 
 
-    System.out.println("Soll weiter gespielt werden?");
+    System.out.println("Soll weiter gespielt werden? (true/false)");
     boolean weiter = In.readBoolean();
     if(weiter){
       if(zahler.size() == 0){
@@ -104,7 +104,7 @@ public class cego_main {
       System.out.println();
     }
 
-    System.out.println("Soll weiter gespielt werden?");
+    System.out.println("Soll weiter gespielt werden? (true/false)");
     boolean weiter = In.readBoolean();
     if(weiter){
       if(zahler.size() == 0){

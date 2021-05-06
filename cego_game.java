@@ -136,7 +136,7 @@ public class cego_game {
       cards[i] = -1;
     }
 
-    for(int i = 0; i < player; i++){                        //jeder Spieler darf eine Karte ablegen
+    for(int i = 0; i < playerCopy.length; i++){                        //jeder Spieler darf eine Karte ablegen
       cards = turn(playerCopy[i], cards);
     }
 
@@ -176,7 +176,7 @@ public class cego_game {
         System.out.println("Dies sind deine Karten:");
         player.printCards();
         int card = In.readInt();
-        if(card < 1 || card > 4 || !isValidCard(cards[0], player, card - 1)){
+        if(card > 0 && card < 5 && !isValidCard(cards[0], player, card - 1)){
           do{
             System.out.println("Diese Karte darf nicht gelegt werden. Wähle bitte eine neue.");
             card = In.readInt();
@@ -238,6 +238,9 @@ public class cego_game {
    * @return true falls die Karte gelegt werden darf
    */
   private boolean isValidCard(int firstCard, cego_player player, int card){
+    if(player.getCards()[card] == null){
+      return false;
+    }
     if(!anyValidCard(firstCard, player)){
       return true;
     }else if(player.getCards()[card].getNr() > 15 || player.getCards()[card].getNr() % 4 == firstCard % 4 && firstCard < 16){
@@ -280,7 +283,7 @@ public class cego_game {
         k++;
       }
       for(int i = 0; i < player.getCards().length; i++){
-        if(player.getCards()[i] != null){
+        if(player.getCards()[i] != null && player.getCards()[k] != null){
           if(player.getCards()[i].getValue() < player.getCards()[k].getValue() && isValidCard(firstCard, player, i)){
             k = i;
           }
@@ -357,11 +360,18 @@ public class cego_game {
       playerCopy[count] = spieler[i];
       count++;
     }
+    for(int i = 0; i < beginner; i++){
+      playerCopy[count] = spieler[i];
+      count++;
+    }
 
     for(int i = 0; i < playerCopy.length; i++){
       boolean raus = false;
 
       if(playerCopy[i].getIsReal()){                                                    //falls Spieler echt...
+
+        System.out.println("Spieler " + playerCopy[i].getNr() + " das sind deine Karten: ");
+        playerCopy[i].printCards();
 
         if(aussetzer > 0 && oldRound){                                                  //wenn man noch aussetzen könnte...
           System.out.println("Willst du aussetzen? (true/false)");   
@@ -369,8 +379,6 @@ public class cego_game {
         }
         if(!raus){
           in.add(playerCopy[i]);
-          System.out.println("Spieler " + playerCopy[i].getNr() + " das sind deine Karten: ");
-          playerCopy[i].printCards();
           System.out.println("Wie viele Karten willst du tauschen?");
           int howMany = In.readInt();
           int[] stellen = new int[howMany];
@@ -384,6 +392,7 @@ public class cego_game {
               zufall = (int) (Math.random()*38);                                           //wird dem Spieler gegeben
             }while(deck.deck[zufall] == null);
             playerCopy[i].setCard(stellen[k], deck.deck[zufall]);
+            deck.deck[zufall] = null;
           }
         }
         else{
@@ -407,7 +416,7 @@ public class cego_game {
     }
     if(oldRound){
       for(int i = 0; i < out.size(); i++){
-        System.out.print("Spieler " + out.get(i) + ", ");
+        System.out.print("Spieler " + out.get(i).getNr() + ", ");
       }
       System.out.println("setzen diese Runde aus.");
 
