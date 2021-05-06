@@ -1,5 +1,16 @@
+import java.util.ArrayList;
+import java.util.List;
+
 public class test {
   public static  void main(String[] args) {
+
+    List<Integer> liste = new ArrayList<>();
+    liste.add( 50);
+    liste.add( 20);
+    liste.remove((Integer)50);
+    liste.remove((Integer)20);
+    liste.remove((Integer)50);
+    System.out.println(liste.size());
     
     /*cego_game game = new cego_game(0,0);
     cego_player test = new cego_player(100, true, 1);

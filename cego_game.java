@@ -1,3 +1,6 @@
+import java.util.ArrayList;
+import java.util.List;
+
 public class cego_game {
 
   private cego_deck deck;
@@ -62,15 +65,15 @@ public class cego_game {
    * teilt jedem Spieler 4 Karten aus
    * @param player die Spieler, denen Karten ausgeteilt wird
    */
-  public void austeilen(cego_player[] player){                                            
+  public void austeilen(){                                            
     deck = new cego_deck();
     int zufall;
-    for(int i = 0; i < player.length; i++){
+    for(int i = 0; i < spieler.length; i++){
       for(int k = 0; k < 4; k++){
         do{
           zufall = (int) (Math.random()*38);
         }while(deck.deck[zufall] == null);
-        player[i].setCard(k, deck.deck[zufall]);
+        spieler[i].setCard(k, deck.deck[zufall]);
         deck.deck[zufall] = null;
       }
     }
@@ -96,20 +99,36 @@ public class cego_game {
   }
 
   /**
-   * startet eine Runde mit allen (Runde Typ 1)
+   * startet eine Runde
    * @param beginner der Spieler der Anfängt
+   * @param gamer die Spieler die mitspielen, null falls RUnde Typ 1
    * @return der Spieler der die Runde gewonnen hat
    */
-  public cego_player startRoundAll(int beginner){
-    cego_player[] playerCopy = new cego_player[spieler.length];                         //eine Kopie des Spieler-Arrays wird erstellt,
-    int count = 0;                                                                      //die Spieler werden so angeordnet, dass der, der 
-    for(int i = beginner; i < playerCopy.length; i++){                                  //anfängt, an der ersten Position im neuen Array ist
-      playerCopy[count] = spieler[i];
-      count++;
+  public cego_player startRoundAll(int beginner, cego_player[] gamer){
+    cego_player[] playerCopy;
+    if(gamer == null){
+      playerCopy = new cego_player[spieler.length];                         //eine Kopie des Spieler-Arrays wird erstellt,
+      int count = 0;                                                                      //die Spieler werden so angeordnet, dass der, der 
+      for(int i = beginner; i < playerCopy.length; i++){                                  //anfängt, an der ersten Position im neuen Array ist
+        playerCopy[count] = spieler[i];
+        count++;
+      }
+      for(int i = 0; i < beginner; i++){
+        playerCopy[count] = spieler[i];
+        count++;
+      }
     }
-    for(int i = 0; i < beginner; i++){
-      playerCopy[count] = spieler[i];
-      count++;
+    else{
+      playerCopy = new cego_player[gamer.length];                         //eine Kopie des Gamer-Arrays wird erstellt,
+      int count = 0;                                                                      //die Spieler werden so angeordnet, dass der, der 
+      for(int i = beginner; i < playerCopy.length; i++){                                  //anfängt, an der ersten Position im neuen Array ist
+        playerCopy[count] = gamer[i];
+        count++;
+      }
+      for(int i = 0; i < beginner; i++){
+        playerCopy[count] = gamer[i];
+        count++;
+      }
     }
 
     int[] cards = new int[player];                          //ein Array wird erstellt, welches die Kartennummern der Karten auf dem Tisch enthält
@@ -324,8 +343,14 @@ public class cego_game {
   /**
    * lässt jeden Spieler seine Karten tauschen bevor eine Runde losgeht
    * @param beginner der Spieler der als erstes tauschen darf
+   * @param oldRound bestätigt ob es sich um eine alte Runde handelt
+   * @return gibt eine Liste der Spieler mit, die mitspielen
    */
-  public void changeCards(int beginner){
+  public cego_player[] changeCards(int beginner, boolean oldRound){
+    int aussetzer = player - 3;                                                         //zählt wie viele noch aussetzen dürfen
+    List<cego_player> out = new ArrayList<>();
+    List<cego_player> in = new ArrayList<>();
+
     cego_player[] playerCopy = new cego_player[spieler.length];                         //eine Kopie des Spieler-Arrays wird erstellt,
     int count = 0;                                                                      //die Spieler werden so angeordnet, dass der, der 
     for(int i = beginner; i < playerCopy.length; i++){                                  //anfängt, an der ersten Position im neuen Array ist
@@ -334,27 +359,41 @@ public class cego_game {
     }
 
     for(int i = 0; i < playerCopy.length; i++){
+      boolean raus = false;
 
       if(playerCopy[i].getIsReal()){                                                    //falls Spieler echt...
-        System.out.println("Spieler " + playerCopy[i].getNr() + " das sind deine Karten: ");
-        playerCopy[i].printCards();
-        System.out.println("Wie viele Karten willst du tauschen?");
-        int howMany = In.readInt();
-        int[] stellen = new int[howMany];
-        for(int k = 0; k < howMany; k++){                                                //die Plätze der zu tauschenden Karten werden sich gemerkt
-          System.out.println("Welche Karte willst du tauschen?");
-          stellen[k] = In.readInt()-1;
+
+        if(aussetzer > 0 && oldRound){                                                  //wenn man noch aussetzen könnte...
+          System.out.println("Willst du aussetzen? (true/false)");   
+          raus = In.readBoolean();                                                      
         }
-        for(int k = 0; k < howMany; k++){
-          int zufall;
-          do{                                                                            //eine zufällige Karte aus dem Stapel (die noch nicht verteilt wurde)
-            zufall = (int) (Math.random()*38);                                           //wird dem Spieler gegeben
-          }while(deck.deck[zufall] == null);
-          playerCopy[i].setCard(stellen[k], deck.deck[zufall]);
+        if(!raus){
+          in.add(playerCopy[i]);
+          System.out.println("Spieler " + playerCopy[i].getNr() + " das sind deine Karten: ");
+          playerCopy[i].printCards();
+          System.out.println("Wie viele Karten willst du tauschen?");
+          int howMany = In.readInt();
+          int[] stellen = new int[howMany];
+          for(int k = 0; k < howMany; k++){                                                //die Plätze der zu tauschenden Karten werden sich gemerkt
+            System.out.println("Welche Karte willst du tauschen?");
+            stellen[k] = In.readInt()-1;
+          }
+          for(int k = 0; k < howMany; k++){
+            int zufall;
+            do{                                                                            //eine zufällige Karte aus dem Stapel (die noch nicht verteilt wurde)
+              zufall = (int) (Math.random()*38);                                           //wird dem Spieler gegeben
+            }while(deck.deck[zufall] == null);
+            playerCopy[i].setCard(stellen[k], deck.deck[zufall]);
+          }
+        }
+        else{
+          aussetzer++;
+          out.add(playerCopy[i]);
         }
       }
 
       else{
+        in.add(playerCopy[i]);
         for(int k = 0; k < playerCopy[i].getCards().length; k++){                       //falls Spieler nicht echt...
           if(playerCopy[i].getCards()[k].getValue() < 8){                               //alle Karten kleiner gleich 5 werden getauscht
             int zufall;
@@ -365,6 +404,18 @@ public class cego_game {
           }
         }
       }
+    }
+    if(oldRound){
+      for(int i = 0; i < out.size(); i++){
+        System.out.print("Spieler " + out.get(i) + ", ");
+      }
+      System.out.println("setzen diese Runde aus.");
+
+      cego_player[] mitmacher = in.toArray(new cego_player[in.size()]);
+      return mitmacher;
+    }
+    else{
+      return null;
     }
   }
 }
