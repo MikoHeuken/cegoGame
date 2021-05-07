@@ -67,9 +67,9 @@ public class cego_main {
 
   private static void startOld(cego_game game, cego_player[] payer, int toPay){
     List<cego_player> zahler = new ArrayList<>();                                                                       //alle Spieler werden gespeichert
-    for(int i = 0; i < game.getSpieler().length; i++){                                                                 //...die, die gewinnen werden rausgestrichen
-      zahler.add(game.getSpieler()[i]);                                                                                 //der Rest muss in der nächsten Runde bezahlen
-    }
+    //for(int i = 0; i < game.getSpieler().length; i++){                                                                 //...die, die gewinnen werden rausgestrichen
+    //  zahler.add(game.getSpieler()[i]);                                                                                 //der Rest muss in der nächsten Runde bezahlen
+    //}
 
     System.out.println("Starte neue Runde...");
     for(int i = 0; i < payer.length; i++){
@@ -79,12 +79,16 @@ public class cego_main {
     System.out.println("zahlen je " + toPay + "ct in den Pot ein.");
     game.setPot(payer.length * toPay);
     game.printPot();
+    toPay = game.getPot();
     
     System.out.println("Teile Karten aus...");
     System.out.println();
     game.austeilen();
 
     cego_player[] player = game.changeCards(starter, true);
+    for(int i = 0; i < player.length; i++){
+      zahler.add(player[i]);
+    }
     beginner = starter;
     setStarter();
 
