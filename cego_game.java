@@ -221,7 +221,7 @@ public class cego_game {
 
         }else{                                                    //falls nicht
           int card = leastValuePossible(player, cards[0]);
-          cards[karten] = player.getCards()[card].getNr();
+          cards[karten] = player.getCards()[card].getNr();        //fehler hoffentlich gefixt
           player.setCard(card, null);
         }
       }
@@ -384,7 +384,12 @@ public class cego_game {
           int[] stellen = new int[howMany];
           for(int k = 0; k < howMany; k++){                                                //die Plätze der zu tauschenden Karten werden sich gemerkt
             System.out.println("Welche Karte willst du tauschen?");
-            stellen[k] = In.readInt()-1;
+            int auswahl = In.readInt();
+            while(auswahl < 1 || auswahl > 4){
+              System.out.println("Ungültige Auswahl. Bitte nocheinmal auswählen.");
+              auswahl = In.readInt();
+            }
+            stellen[k] = auswahl - 1;
           }
           for(int k = 0; k < howMany; k++){
             int zufall;
