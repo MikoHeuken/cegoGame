@@ -66,17 +66,14 @@ public class cego_main {
   }
 
   private static void startOld(cego_game game, cego_player[] payer, int toPay){
-    List<cego_player> zahler = new ArrayList<>();                                                                       //alle Spieler werden gespeichert
-    //for(int i = 0; i < game.getSpieler().length; i++){                                                                 //...die, die gewinnen werden rausgestrichen
-    //  zahler.add(game.getSpieler()[i]);                                                                                 //der Rest muss in der nächsten Runde bezahlen
-    //}
+    List<cego_player> zahler = new ArrayList<>();                                                                 //...die, die gewinnen werden rausgestrichen                                                                                 //der Rest muss in der nächsten Runde bezahlen
 
     System.out.println("Starte neue Runde...");
     for(int i = 0; i < payer.length; i++){
       System.out.print("Spieler " + payer[i].getNr() + ", ");
       payer[i].setMoney(-(toPay));
     }
-    System.out.println("zahlen je " + toPay + "ct in den Pot ein.");
+    System.out.println("zahlt/zahlen je " + toPay + "ct in den Pot ein.");
     game.setPot(payer.length * toPay);
     game.printPot();
     toPay = game.getPot();
@@ -86,6 +83,9 @@ public class cego_main {
     game.austeilen();
 
     cego_player[] player = game.changeCards(starter, true);
+
+    player = sortPlayer(player);
+
     for(int i = 0; i < player.length; i++){
       zahler.add(player[i]);
     }
@@ -129,6 +129,30 @@ public class cego_main {
     }else{
       starter++;
     }
+  }
+
+  /**
+   * sortiert ein cego_player Array aufsteigend nach Nummer
+   * @param toSort das zu sortierende Array
+   * @return das sortierte Array
+   */
+  private static cego_player[] sortPlayer(cego_player[] toSort){
+    cego_player[] sorted = new cego_player[toSort.length];
+    int lowest = 0;
+    for(int i = 0; i < sorted.length; i++){
+      for(int k = 0; k < toSort.length; k++){
+        while(toSort[lowest] == null && lowest < 3){
+          lowest++;
+        }
+        if(toSort[k] != null && toSort[k].getNr() < toSort[lowest].getNr()){
+          lowest = k;
+        }
+      }
+      sorted[i] = toSort[lowest];
+      toSort[lowest] = null;
+      lowest = 0;
+    }
+    return sorted;
   }
 
 }

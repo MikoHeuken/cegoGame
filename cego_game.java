@@ -423,7 +423,9 @@ public class cego_game {
       for(int i = 0; i < out.size(); i++){
         System.out.print("Spieler " + out.get(i).getNr() + ", ");
       }
-      System.out.println("setzen diese Runde aus.");
+      if(out.size() != 0){
+        System.out.println("setzt/setzen diese Runde aus.");
+      }
 
       cego_player[] mitmacher = in.toArray(new cego_player[in.size()]);
       return mitmacher;
